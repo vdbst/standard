@@ -1,0 +1,15 @@
+{
+  "name": "@vdbst/std",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan Nitschke",
+  "license": "ISC",
+  "dev-dependencies": {
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9"
+  }
+}
