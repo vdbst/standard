@@ -8,6 +8,10 @@
   },
   "author": "Jan Nitschke",
   "license": "ISC",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@vdbst"
+  },
+  "repository": "git://github.com/vdbst/offerview.git",
   "dev-dependencies": {
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"
