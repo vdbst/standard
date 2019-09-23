@@ -3,10 +3,11 @@ import { Result } from "./result";
 
 export function match(subject, options){
     if(subject instanceof Result){
+        if(options.Err) subject._errorHandlerRegistered = true;
         if(subject.is_ok()){
-            return options.Ok(subject.value);
+            return options.Ok && options.Ok(subject.value);
         }else{
-            return options.Err(subject.value);
+            return options.Err && options.Err(subject.value);
         }
     }else if(typeof subject === "string"){
         if(options[subject]){

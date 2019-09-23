@@ -1,6 +1,6 @@
 {
-  "name": "@vdbst/std",
-  "version": "0.1.0",
+  "name": "std",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {

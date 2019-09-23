@@ -28,29 +28,43 @@ var encErrResult = fn(() => {
     okResult.or_Fail();
 });
 
-console.log("matching...")
-
 match(encErrResult, {
     Ok: (val) => console.log("enc result is ok!", val),
     Err: (val) => console.log("enc result is err!", val)
 })
 
+
+console.log("matching...")
+
+var unhandledOkResult = fn(() => {
+    return Ok("working");
+});
+
 const matchTest = (val) => {
     match(val, {
         1: () => console.log("first"),
         2: () => console.log("second"),
-        _: (val) => console.log(val+"th")
+        3: () => console.log("third"),
+        _: (val) => console.log(val + "th")
     })
 }
+
 
 matchTest(1);
 matchTest(2);
 matchTest(3);
+matchTest(4);
 
 console.log("unwraping...");
 
 var o = okResult.unwrap();
 console.log("ok result", o);
 
+console.log("uhok result", unhandledOkResult);
+
+setTimeout(() => console.log('fin'), 100);
+
+/*
 var e = errResult.unwrap();
 console.log("err result", e);
+*/

@@ -15,7 +15,9 @@ export function fn (cb) {
         }
     }catch(ex){
         if(ex && ex.IS_STD_ERR){
-            return Err(ex.reason);
+            var er = Err(ex.reason);
+            er.stack = ex.stack;
+            return er;
         }else{
             throw(ex);
         }
@@ -28,8 +30,7 @@ export class Result{
         this.state = state;
         this.value = value;
         this._errorHandlerRegistered = false;
-        this.errorCB = () => {};
-        this.successCB = () => {};
+        setTimeout((() => {if(!this._errorHandlerRegistered) console.warn("unhandled error result!")}), 0)
     }
 
     is_err(){
@@ -41,6 +42,7 @@ export class Result{
     }
 
     or_Fail(){
+        this._errorHandlerRegistered = true;
         if(this.is_err()){
             reportError(this.value);
         }
@@ -48,14 +50,18 @@ export class Result{
     }
 
     unwrap(){
+        this._errorHandlerRegistered = true;
         if(this.state === "Ok"){
             return this.value;
         }else{
             if(typeof this.value === "string"){
-                throw new Error(this.value);
-
+                var e = new Error(this.value);
+                e.originalStack = this.stack;
+                throw e;
             }else{
-                throw new Error(this.value.toString());
+                var e = new Error(this.value.toString());
+                e.originalStack = this.stack;
+                throw e;
             }           
         }
     }
