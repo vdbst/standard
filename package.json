@@ -1,10 +1,11 @@
 {
   "name": "std",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --production"
   },
   "author": "Jan Nitschke",
   "license": "ISC",
@@ -12,7 +13,7 @@
     "registry": "https://npm.pkg.github.com/@vdbst"
   },
   "repository": "git://github.com/vdbst/offerview.git",
-  "dev-dependencies": {
+  "devDependencies": {
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"
   }

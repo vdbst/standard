@@ -60,9 +60,14 @@ console.log("unwraping...");
 var o = okResult.unwrap();
 console.log("ok result", o);
 
-console.log("uhok result", unhandledOkResult);
 
-setTimeout(() => console.log('fin'), 100);
+var orErrResult = fn(() => {
+    return Err("not working");
+});
+var a = orErrResult.or("nein").unwrap();
+console.log("or err result", a);
+
+
 
 /*
 var e = errResult.unwrap();

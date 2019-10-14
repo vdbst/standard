@@ -6,20 +6,22 @@ function reportError(reason){
 }
 
 export function fn (cb) {
-    try{
-        var r = cb();
-        if(r instanceof Result){
-            return r;
-        }else{
-            return Ok(r);
-        }
-    }catch(ex){
-        if(ex && ex.IS_STD_ERR){
-            var er = Err(ex.reason);
-            er.stack = ex.stack;
-            return er;
-        }else{
-            throw(ex);
+    return function() {
+        try{
+            var r = cb(...arguments);
+            if(r instanceof Result){
+                return r;
+            }else{
+                return Ok(r);
+            }
+        }catch(ex){
+            if(ex && ex.IS_STD_ERR){
+                var er = Err(ex.reason);
+                er.stack = ex.stack;
+                return er;
+            }else{
+                throw(ex);
+            }
         }
     }
 };
@@ -30,7 +32,13 @@ export class Result{
         this.state = state;
         this.value = value;
         this._errorHandlerRegistered = false;
-        setTimeout((() => {if(!this._errorHandlerRegistered) console.warn("unhandled error result!")}), 0)
+        if(process.env.NODE_ENV !== "production"){
+            var e = new Error();
+            setTimeout((() => {
+                if(!this._errorHandlerRegistered){
+                    console.warn("unhandled error result!", this.value, e.stack)}
+            }), 0)
+        }
     }
 
     is_err(){
@@ -46,7 +54,24 @@ export class Result{
         if(this.is_err()){
             reportError(this.value);
         }
-        return this;
+        return this.value;
+    }
+    
+    or(handler){
+        this._errorHandlerRegistered = true;
+        if(this.is_err()){
+            return Ok(handler);
+        }else{
+            return this;
+        }
+    }
+    
+    and(handler){
+        if(this.is_ok()){
+            return Ok(handler);
+        }else{
+            return this;
+        }
     }
 
     unwrap(){
@@ -67,11 +92,35 @@ export class Result{
     }
 
     static Ok(result){
-        return new Result("Ok", result);
+        if(result === undefined) return Err("no result given to Ok");
+        if(typeof result === "function"){
+            var r = result();
+            if (typeof r == Object && r instanceof Result) {
+                return r;
+            }else{
+                return new Result("Ok", r);
+            }
+        }else if (typeof result == Object && result instanceof Result) {
+            return result;
+        }else{
+            return new Result("Ok", result);
+        }
     }
 
     static Err(reason){
-        return new Result("Err", reason);
+        if(reason === undefined) return Err("no reason given to Err");
+        if(typeof reason === "function"){
+            var r = reason();
+            if (typeof r == Object && r instanceof Result) {
+                return r;
+            }else{
+                return new Result("Err", r);
+            }
+        }else if (typeof reason == Object && reason instanceof Result) {
+            return reason;
+        }else{
+            return new Result("Err", reason);
+        }
     }
 }
 
