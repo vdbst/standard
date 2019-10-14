@@ -91,6 +91,13 @@ export class Result{
         }
     }
 
+    static fromCallback(resolver){
+        return (err, res) => {
+            if(err) resolver(Err(err))
+            else resolver(Ok(res));
+        };
+    }
+
     static Ok(result){
         if(result === undefined) return Err("no result given to Ok");
         if(typeof result === "function"){

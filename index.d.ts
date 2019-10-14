@@ -16,6 +16,8 @@ export class Result<T>{
 
     unwrap(): T | undefined;    
 
+    static fromCallback<T>(resolver: (result: Result<T>) => void): (err: any, result:T) => void;
+
     static Ok<T>(result: T): Result<T>;
 
     static Err<T>(reason: any): Result<T>;
