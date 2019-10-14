@@ -98,6 +98,12 @@ export class Result{
         };
     }
 
+    static fromPromise(promise){
+        return new Promise(resolve => {
+            promise.then(res => resolve(Ok(res))).catch(ex => resolve(Err(ex)));
+        });
+    }
+
     static Ok(result){
         if(result === undefined) return Err("no result given to Ok");
         if(typeof result === "function"){
