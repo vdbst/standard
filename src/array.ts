@@ -67,6 +67,7 @@ export class StdArray<T>{
         for (let index = 0; index < array.length; index++) {
             out[index] = callback(array[index], index, this);
         }
+        return new StdArray(out);
     }
 
     mapParallel<V>(callback: (value:T, index:number, array: this) => Promise<V>): Promise<StdArray<V>>{
