@@ -1,17 +1,18 @@
 
-function reportError(reason: any){
-    let e = new Error("Uncatched error Result!") as any;
+function reportError(reason: string){
+    let e = new Error(reason) as any;
     e.reason = reason;
     e.IS_STD_ERR = true;
     throw e;
-}
+}   
 
-export const  enum OptionState {
+export const enum OptionState {
     Some = "Some",
     None = "None",
 }
 
-export class Option<T = null>{
+
+export class Option<T = any>{
     value?: T;
     readonly state: OptionState;
     _nullHandlerRegistered = false;
@@ -31,6 +32,7 @@ export class Option<T = null>{
         }
     }
 
+
     isNone():boolean{
         this._nullHandlerRegistered = true;
         return this.state === OptionState.None;
@@ -48,7 +50,7 @@ export class Option<T = null>{
         return this;
     }
     
-    or(handler?: T|((...[]) => T)): Option<T>{
+    or(handler?: T|Option<T>|((...[]) => T|Option<T>)): Option<T>{
         this._nullHandlerRegistered = true;
         if(this.isNone()){
             let res;
@@ -57,7 +59,10 @@ export class Option<T = null>{
             }else{
                 res = handler;
             }
-            if(res !== undefined){
+            if (typeof res == "object"  && res instanceof Option) {
+                return res;
+            }
+            if(res !== undefined && res !== null){
                 return Some(res)
             }else{
                 return None();
@@ -67,7 +72,7 @@ export class Option<T = null>{
         }
     }
     
-    and(handler?: T|((...[]) => T)): Option<T>{
+    and(handler?: T|Option<T>|((...[]) => T|Option<T>)): Option<T>{
         if(this.isSome()){
             let res;
             if(typeof handler === "function"){
@@ -75,7 +80,10 @@ export class Option<T = null>{
             }else{
                 res = handler;
             }           
-            if(res !== undefined){
+            if (typeof res == "object"  && res instanceof Option) {
+                return res;
+            }
+            if(res !== undefined && res !== null){
                 return Some(res)
             }else{
                 return None();
@@ -90,44 +98,33 @@ export class Option<T = null>{
         if(this.state === OptionState.Some){
             return this.value as T;
         }else{
-            return null;      
-        }
-    }
-
-    unwrapOrFail():T{
-        this._nullHandlerRegistered = true;
-        if(this.state === OptionState.Some){
-            return this.value as T;
-        }else{
-            var e = new Error("Option has no value") as any;
-            throw e;
+            reportError("Option has no value");
+            // never executed, just to keep typescript calm...
+            /* istanbul ignore next */
+            return null;
         }
     }
 
     static fromCallback<T>(resolver: (opt: Option<T>) => any ): (err: any, res: any) => void{
         return (err, res) => {
             if(err) resolver(None())
-            else resolver((res === undefined)?Some(res):None());
+            else resolver(Perhaps(res));
         };
     }
 
     static fromPromise<T>(promise:Promise<T>): Promise<Option<T>>{
         return new Promise(resolve => {
-            promise.then(res => resolve((res === undefined)?Some(res):None())).catch(() => resolve(None()));
+            promise.then(res => resolve((res === undefined || res === null)?None():Some(res))).catch(() => resolve(None()));
+            promise.catch(() => resolve(None()));
         });
     }
 
-    static Some<T>(result: Option<T>|T|undefined): Option<T>{
-        if(result === undefined) return None();
-        if(typeof result === "function"){
-            var r = result();
-            if (typeof r == "object" && r instanceof Option) {
-                return r;
-            }else{
-                if(result === undefined) return None() 
-                else return new Option(OptionState.Some, r);
-            }
-        }else if (typeof result == "object"  && result instanceof Option) {
+    static Some<T>(result: T): Option<T>;
+    static Some<T>(result: Option<T>): Option<T>;
+    static Some<T>(result: Option<T>|T): Option<T>{
+        if(result === undefined || result === null) reportError("Called Some with a null value") ;
+        if (typeof result == "object"  && result instanceof Option) {
+            if(result.isNone()) reportError("Called Some with a None Option value");
             return result;
         }else{
             return new Option(OptionState.Some, result);
@@ -137,12 +134,31 @@ export class Option<T = null>{
     static None(): Option<any>{
         return new Option();
     }
+
+    static Perhaps<T>(result?: T): Option<T>;
+    static Perhaps<T>(result?: Option<T>): Option<T>;
+    static Perhaps<T>(result?: T|Option<T>): Option<T>{
+        if(result === undefined || result === null) return None();
+        if (typeof result == "object"  && result instanceof Option) {
+            return result;
+        }else{
+            return new Option(OptionState.Some, result);
+        }
+    }
 }
 
-export function Some<T>(result: Option<T>|T|undefined):Option<T>{
-    return Option.Some(result);
+export function Some<T>(result: T): Option<T>;
+export function Some<T>(result: Option<T>): Option<T>;
+export function Some<T>(result: Option<T>|T):Option<T>{
+    return Option.Some(result as any);
 }
 
 export function None():Option<any>{
     return Option.None();
+}
+
+export function Perhaps<T>(result?: T): Option<T>;
+export function Perhaps<T>(result?: Option<T>): Option<T>;
+export function Perhaps<T>(result?: T|Option<T>): Option<T>{
+    return Option.Perhaps(result as any);
 }

@@ -30,7 +30,7 @@
     "exclude": [
       "**/*.d.ts",
       "/node_modules/**",
-      "/coverage/**"
+      "coverage/**"
     ],
     "reporter": [
       "html"

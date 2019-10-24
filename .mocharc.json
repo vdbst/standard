@@ -8,4 +8,4 @@
     "timeout": 2000,
     "ui": "bdd",
     "recursive": true
-  }
+}

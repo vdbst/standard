@@ -7,16 +7,14 @@ describe("Result",() => {
     describe("Result constructor",() => {
         it('should set OK values', () => {
             const okResult = new Result(ResultState.Ok, "All good!");
-            expect(okResult.isOk()).to.equal(true);
-            expect(okResult.isErr()).to.equal(false);
+            expect(okResult.state).to.equal(ResultState.Ok);
             expect(okResult.value).to.equal("All good!");
             expect(okResult.error).to.equal(undefined);
         });
     
         it('should set Err values', () => {
             const errResult = new Result(ResultState.Err, "Something bad happend!");
-            expect(errResult.isErr()).to.equal(true);
-            expect(errResult.isOk()).to.equal(false);
+            expect(errResult.state).to.equal(ResultState.Err);
             expect(errResult.value).to.equal(undefined);
             expect(errResult.error).to.equal("Something bad happend!");
         });
@@ -25,18 +23,16 @@ describe("Result",() => {
     describe("Ok shorthand",() => {
         it('should set OK values', () => {
             const okResult = Ok("All good!");
-            expect(okResult.isOk()).to.equal(true);
-            expect(okResult.isErr()).to.equal(false);
+            expect(okResult.state).to.equal(ResultState.Ok);
             expect(okResult.value).to.equal("All good!");
             expect(okResult.error).to.equal(undefined);
         });
     
         it('should not wrap an existing Ok', () => {
             const okResult = Ok(Ok("All good!"));
-            expect(okResult instanceof Result).to.equal(true);
-            expect((okResult.value as any) instanceof Result).to.equal(false);
-            expect(okResult.isOk()).to.equal(true);
-            expect(okResult.isErr()).to.equal(false);
+            expect(okResult instanceof Result).to.be.true;
+            expect((okResult.value as any) instanceof Result).to.be.false;
+            expect(okResult.state).to.equal(ResultState.Ok);
             expect(okResult.value).to.equal("All good!");
             expect(okResult.error).to.equal(undefined);
         });
@@ -44,15 +40,14 @@ describe("Result",() => {
         it('should not convert Err to Ok', () => {
             const errResult = new Result(ResultState.Err, "Something bad happend!");
             const notOkResult = Ok(errResult);
-            expect(notOkResult.isErr()).to.equal(true);
-            expect(notOkResult.isOk()).to.equal(false);
+            expect(notOkResult.state).to.equal(ResultState.Err);
             expect(notOkResult.value).to.equal(undefined);
             expect(notOkResult.error).to.equal("Something bad happend!");
         });
 
         it('should return Err if there is no result', () => {
             const result = Ok(undefined);
-            expect(result.isErr()).to.equal(true);
+            expect(result.state).to.equal(ResultState.Err);
             expect(result.error).to.equal("no result given to Ok");
 
         });
@@ -61,8 +56,7 @@ describe("Result",() => {
     describe("Err shorthand",() => {
         it('should set Err values', () => {
             const errResult = Err("Something bad happend!");
-            expect(errResult.isOk()).to.equal(false);
-            expect(errResult.isErr()).to.equal(true);
+            expect(errResult.state).to.equal(ResultState.Err);
             expect(errResult.value).to.equal(undefined);
             expect(errResult.error).to.equal("Something bad happend!");
     
@@ -70,29 +64,27 @@ describe("Result",() => {
     
         it('should not wrap an existing Err', () => {
             const errResult = Err(Err("Something bad happend!"));
-            expect(errResult instanceof Result).to.equal(true);
-            expect((errResult.error as any) instanceof Result).to.equal(false);
-            expect(errResult.isOk()).to.equal(false);
-            expect(errResult.isErr()).to.equal(true);
+            expect(errResult instanceof Result).to.be.true;
+            expect((errResult.error as any) instanceof Result).to.be.false;
+            expect(errResult.state).to.equal(ResultState.Err);
             expect(errResult.value).to.equal(undefined);
             expect(errResult.error).to.equal("Something bad happend!");
         });
     
         it('should return Err if there is no result', () => {
             const result = Err(undefined);
-            expect(result.isErr()).to.equal(true);
+            expect(result.state).to.equal(ResultState.Err);
             expect(result.error).to.equal("no reason given to Err");
 
             const result2 = Err(null);
-            expect(result2.isErr()).to.equal(true);
+            expect(result2.state).to.equal(ResultState.Err);
             expect(result2.error).to.equal("no reason given to Err");
         });
 
         it('should not convert Ok to Err', () => {
             const okResult = new Result(ResultState.Ok, "All good!");
             const notErrResult = Err(okResult);
-            expect(notErrResult.isErr()).to.equal(false);
-            expect(notErrResult.isOk()).to.equal(true);
+            expect(notErrResult.state).to.equal(ResultState.Ok);
             expect(notErrResult.value).to.equal("All good!");
             expect(notErrResult.error).to.equal(undefined);
         });
@@ -102,11 +94,11 @@ describe("Result",() => {
     describe("isOk",() => {
         it('should return true on Ok results',() => {
             const okResult = new Result(ResultState.Ok, "All good!");
-            expect(okResult.isOk()).to.equal(true);
+            expect(okResult.isOk()).to.be.true;
         });
         it('should return false on Err results',() => {
-            const errResult = Err(Err("Something bad happend!"));
-            expect(errResult.isOk()).to.equal(false);
+            const errResult = Err("Something bad happend!");
+            expect(errResult.isOk()).to.be.false;
         });
        
     });
@@ -114,11 +106,11 @@ describe("Result",() => {
     describe("isErr",() => {
         it('should return false on Ok results',() => {
             const okResult = Ok("All good!");
-            expect(okResult.isErr()).to.equal(false);
+            expect(okResult.isErr()).to.be.false;
         });
         it('should return true on Err results',() => {
             const errResult = Err("Something bad happend!");
-            expect(errResult.isErr()).to.equal(true);
+            expect(errResult.isErr()).to.be.true;
         });
     });
 
