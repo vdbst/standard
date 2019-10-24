@@ -50,7 +50,7 @@ export class Option<T = any>{
         return this;
     }
     
-    or(handler?: T|Option<T>|((...[]) => T|Option<T>)): Option<T>{
+    or(handler?: T|Option<T>|(() => T|Option<T>)): Option<T>{
         this._nullHandlerRegistered = true;
         if(this.isNone()){
             let res;
@@ -72,11 +72,11 @@ export class Option<T = any>{
         }
     }
     
-    and(handler?: T|Option<T>|((...[]) => T|Option<T>)): Option<T>{
+    and(handler?: T|Option<T>|((value: T) => T|Option<T>)): Option<T>{
         if(this.isSome()){
             let res;
             if(typeof handler === "function"){
-                res = (handler as Function)();
+                res = (handler as Function)(this.value);
             }else{
                 res = handler;
             }           

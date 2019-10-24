@@ -47,12 +47,14 @@ export class Result<R = any,E = any>{
         return this;
     }
     
-    or(handler?: R|Result<R,E>|((...[]) => R|Result<R,E>)): Result<R, E>{
+    or(handler?: R|Result<R,E>): Result<R, E>;
+    or(handler?: ((reason?:E) => R|Result<R,E>)): Result<R, E>;
+    or(handler?: R|Result<R,E>|((reason?:E) => R|Result<R,E>)): Result<R, E>{
         this._errorHandlerRegistered = true;
         if(this.isErr()){
-            let res;
+            let res: any;
             if(typeof handler === "function"){
-                res = (handler as Function)();
+                res = (handler as (reason?:E) => R|Result<R,E>)(this.error);
             }else{
                 res = handler;
             }
@@ -62,12 +64,14 @@ export class Result<R = any,E = any>{
         }
     }
 
-    and(handler?: R|Result<R,E>|((...[]) => R|Result<R,E>)): Result<R, E>{
+    and(handler?: R|Result<R,E>): Result<R, E>;
+    and(handler?: ((result?:R) => R|Result<R,E>)): Result<R, E>;
+    and(handler?: R|Result<R,E>|((result:R) => R|Result<R,E>)): Result<R, E>{
         this._errorHandlerRegistered = true;
         if(this.isOk()){
             let res;
             if(typeof handler === "function"){
-                res = (handler as Function)();
+                res = (handler as Function)(this.value);
             }else{
                 res = handler;
             }
