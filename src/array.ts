@@ -8,6 +8,12 @@ export class StdArray<T>{
             if(typeof prop === "number") return obj.get(prop);
             //@ts-ignore
             else return obj[prop];
+        },
+        set: function(obj, prop, value, receiver): boolean {
+            if(typeof prop === "number") {obj.set(prop, value); return true}
+            
+            //@ts-ignore
+            else return obj[prop] = value;
         }
     };
 
