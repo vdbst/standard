@@ -3,6 +3,13 @@ import { Perhaps, Option } from "./option";
 export class StdArray<T>{
 
     private internalArray: Array<T>;
+    private proxyHandler: ProxyHandler<this> = {
+        get: function(obj, prop) {
+            if(typeof prop === "number") return obj.get(prop);
+            //@ts-ignore
+            else return obj[prop];
+        }
+    };
 
     constructor();
     constructor(items: Array<T>);
@@ -13,6 +20,7 @@ export class StdArray<T>{
         }else{
             this.internalArray = items;
         }
+        return new Proxy(this, this.proxyHandler);
     }
 
     get(index: number): Option<T>{
