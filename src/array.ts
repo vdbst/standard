@@ -52,7 +52,7 @@ export class StdArray<T>{
 
     forEach(callback: (value:T, index: number,  array: this) => void): void{
         const array = this.internalArray;
-        for (let index = 0; index < array.length; index++) {
+        for (let index = 0; index < array.length; ++index) {
             callback(array[index], index, this);
         }
         return;
@@ -61,7 +61,7 @@ export class StdArray<T>{
     forEachParallel(callback: (value:T, index:number, array: this) => Promise<void>): Promise<void>{
         const promises = [];
         const array = this.internalArray;
-        for (let index = 0; index < array.length; index++) {
+        for (let index = 0; index < array.length; ++index) {
             promises.push(callback(array[index], index, this));
         }
         return Promise.all(promises).then(() => undefined);
@@ -69,7 +69,7 @@ export class StdArray<T>{
 
     async forEachSequenced(callback: (value:T, index:number, array: this) => Promise<void>): Promise<void>{
         const array = this.internalArray;
-        for (let index = 0; index < array.length; index++) {
+        for (let index = 0; index < array.length; ++index) {
             await callback(array[index], index, this);
         }
         return;
@@ -78,7 +78,7 @@ export class StdArray<T>{
     map<V>(callback: (value:T, index: number,  array: this) => V): StdArray<V>{
         const out = [];
         const array = this.internalArray;
-        for (let index = 0; index < array.length; index++) {
+        for (let index = 0; index < array.length; ++index) {
             out[index] = callback(array[index], index, this);
         }
         return new StdArray(out);
@@ -87,7 +87,7 @@ export class StdArray<T>{
     mapParallel<V>(callback: (value:T, index:number, array: this) => Promise<V>): Promise<StdArray<V>>{
         const out: Array<Promise<V>>  = [];
         const array = this.internalArray;
-        for (let index = 0; index < array.length; index++) {
+        for (let index = 0; index < array.length; ++index) {
             out.push(callback(array[index], index, this));
         }
         return Promise.all(out).then(res => new StdArray(res));
@@ -96,7 +96,7 @@ export class StdArray<T>{
     async mapSequenced<V>(callback: (value:T, index:number, array: this) => Promise<V>): Promise<StdArray<V>>{
         const out: Array<V> = [];
         const array = this.internalArray;
-        for (let index = 0; index < array.length; index++) {
+        for (let index = 0; index < array.length; ++index) {
             out[index] = await callback(array[index], index, this); 
         }
         return new StdArray(out);
