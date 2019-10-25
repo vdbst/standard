@@ -1,4 +1,4 @@
-import { Option, OptionState, Some, None, Perhaps } from './option';
+import { Option, OptionState, Some, None, Perhaps } from './mod';
 import { expect } from 'chai';
 import 'mocha';
 

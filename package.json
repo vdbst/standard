@@ -29,8 +29,10 @@
     ],
     "exclude": [
       "**/*.d.ts",
+      "**/*.spec.js",
       "/node_modules/**",
-      "coverage/**"
+      "coverage/**",
+      "mod.js"
     ],
     "reporter": [
       "html"

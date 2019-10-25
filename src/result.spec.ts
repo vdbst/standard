@@ -1,4 +1,4 @@
-import { Result, ResultState, Ok, Err } from './result';
+import { Result, ResultState, Ok, Err } from './mod';
 import { expect } from 'chai';
 import 'mocha';
 

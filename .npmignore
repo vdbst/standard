@@ -1,0 +1,4 @@
+.nycc_output
+coverage
+node_modules
+src

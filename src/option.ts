@@ -8,7 +8,7 @@ function reportError(reason: string){
 
 export const enum OptionState {
     Some = "Some",
-    None = "None",
+    None = "None"
 }
 
 
@@ -24,7 +24,7 @@ export class Option<T = any>{
     constructor(state?: OptionState, value ?: T) {
         if(state === undefined){
             this.state = OptionState.None;
-        }else{
+        } else {
             this.state = state;
         }
         if(state === OptionState.Some){
