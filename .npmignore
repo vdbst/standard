@@ -1,4 +1,5 @@
-.nycc_output
+.nyc_output
 coverage
 node_modules
 src
+tsconfig.json
