@@ -3,12 +3,12 @@
 A helper and utility library for better and cleaner code. 
 
 ## Importing
-This library ships as compiled typescript that can directly be imported in or the browser. It is recommended to use a bundler for frontend use since this lib contains quite a lot of small files. This library uses ES6 syntax and u may need some polyfills for older browsers.
+This library ships as compiled typescript that can directly be imported in node or the browser. It is recommended to use a bundler for frontend use since this lib contains quite a lot of small files. This library uses ES6 syntax and you may need some polyfills for older browsers.
 
-to import in node:
+To import in node:
 
 ~~~js
-//complete 
+// complete 
 const std = require('@vdbst/std');
 
 // only some features
@@ -18,9 +18,9 @@ const { Result, Ok, Err, fun } = require('@vdbst/std');
 # Options
 
 ## Usage 
-The option class is intended to be used as a return in functions that may or may not return a value. It should move the responibility of handling null values to the callee of the function. It should also make the developer that uses functions aware of the possibility of a null value.
+The option class is intended to be used as a return in functions that may or may not return a value. It should move the responibility of handling null/undefined values to the callee of the function. It should also make the developer that uses functions aware of the possibility of a null/undefined value.
 
-Basic usage
+Basic usage:
 ~~~js
 const { Option, OptionState } = require('@vdbst/std');
 
@@ -34,10 +34,12 @@ function test (){
 ~~~
 
 ## Shorthands 
-To reduce the amount of code needed for that simple return there are shorter versions of new Option(...): 
-    - Some(value) 
-    - None()
-in mose cases these should be used since they are way more readable
+To reduce the amount of code needed for that simple return there are shorter versions of new Option(...):
+
+- Some(value) 
+- None()
+
+In most cases these should be used since they are way more readable.
 
 
 ~~~js
@@ -65,9 +67,9 @@ function test (){
 ~~~
 
 ## Functions
-Now that we can know how to create options we need to have a way to interact with them.
+Now that we know how to create options we need a way to interact with them.
 
-Each option object has some member functions that can be used to interact with it
+Each option object has some member functions that can be used to interact with it.
 
 ### Checking 
 
@@ -76,25 +78,24 @@ Option.isSome(); // true if the option has a value
 Option.isNone(); // true if the option has no value
 ~~~
 
-### getting the value 
+### Getting the value 
 
 ~~~js
-
-Option.unwrap() // returns the value or throws an error if there is none
+Option.unwrap(); // returns the value or throws an error if there is none
 ~~~
   
-### chaining
- options can be chained like promises! If the callback return values they will be converted to Options
+### Chaining
+Options can be chained like promises! If the callback returns a value it will be converted to an Options object:
     
 ~~~js
 // executes the function if a none option is present. 
-option.or( () => {} ) // returns a new Option
+option.or( () => {} ); // returns a new Option
 
 // executes the function if a some option is present
-option.and( () => {} ) // returns a new Option
+option.and( () => {} ); // returns a new Option
 
 // throws if the option is none
-option.orFail() // returns a new some option
+option.orFail(); // returns a new some option
 ~~~
 
 There are some utility functions for better usage with callbacks and promises:
@@ -110,7 +111,7 @@ someFunctionCall(Option.fromCallback(resolver));
 var x = new Promise(resolve => {
         someFunctionCall(Option.fromCallback(resolve));
 });
-//this will return a Option Promise    
+//this will return an Option Promise    
 ~~~
 
 ### Promises
@@ -122,7 +123,7 @@ const opt = Option.fromPromise(prom);
 
 # Results
 ## Usage 
-A result value is used to indecate that a operation might fail. They are very simelar to Options, but the error case needs some value. It should move the responibility of handling errors to the callee of the function. It should also make the developer that uses functions aware of the possibility of an Error.
+A result value is used to indicate that an operation might fail. They are very similar to Options, but the error case needs some value. It should move the responibility of handling errors to the callee of the function. It should also make the developer that uses functions aware of the possibility of an Error.
 
 Basic usage:
 ~~~js
@@ -131,9 +132,9 @@ const { Result, ResultState } = require('@vdbst/std');
 function test (){
     // something that can fail
     if(error){
-        return new Result(ResultState.Ok, "all good!")
+        return new Result(ResultState.Ok, "all good!");
     }elsE{
-        return new Result(ResultState.Err, "oh no!")
+        return new Result(ResultState.Err, "oh no!");
     }
 }
 ~~~
@@ -144,7 +145,7 @@ To reduce the amount of code needed for that simple return there are shorter ver
 - Ok(value) 
 - Err(reason)
 
-in mose cases these should be used since they are way more readable
+In most cases these should be used since they are way more readable.
 
 
 ~~~js
@@ -153,17 +154,17 @@ const { Result, Ok, Err } = require('@vdbst/std');
 function test (){
     // something that can fail
     if(error){
-        return Ok("all good!")
+        return Ok("all good!");
     }else{
-        return Err("oh no!")
+        return Err("oh no!");
     }
 ~~~
 
 
 ## Functions
-Now that we can know how to create results we need to have a way to interact with them.
+Now that we can know how to create results we need a way to interact with them.
 
-Each result object has some member functions that can be used to interact with it
+Each result object has some member functions that can be used to interact with it.
 
 ### Checking 
 
@@ -172,24 +173,25 @@ Result.isOk(); // true if the result holds a value
 Option.isErr(); // true if the result holds an error
 ~~~
 
-### getting the value 
+### Getting the value
 
 ~~~js
-
-Result.unwrap() // returns the value or throws the error it contains
+Result.unwrap(); // returns the value or throws the error it contains
 ~~~
   
-### chaining
-results can be chained like promises! If the callback return values they will be wraped in result objects
+### Chaining
+
+Results can be chained like promises! If the callback returns a value it will be wraped in a Result object:
+
 ~~~js
 // executes the function if an error result is present. 
-result.or( () => {} ) // returns a new Result
+result.or( () => {} ); // returns a new Result
 
 // executes the function if a value result is present
-result.and( () => {} ) // returns a new Result
+result.and( () => {} ); // returns a new Result
 
 // throws if the option is none
-result.orFail() // returns a new Result
+result.orFail(); // returns a new Result
 ~~~
 
 There are some utility functions for better usage with callbacks and promises:
@@ -223,41 +225,42 @@ const errRes = Result.fromPromise(prom);
 ~~~
 
 # Fun
-using option and result is a nice way to handle Errors and Null values, but handling them requires quite a lot of code. Luckily Passing Results and Options up the scope chain can be simplified with the fun syntax!
+Using option and result is a nice way to handle Errors and Null values, but handling them requires quite a lot of code. Luckily Passing Results and Options up the scope chain can be simplified with the fun syntax!
 Functions wrapped with fun will allways return Results.
 
 ## Usage
-Basic usaage:
+Basic usage:
+
 ~~~js
 const { fun, Ok, Err } = require('@vdbst/std');
 
 const betterErrorFunction = fun(params => {
-    // if any err results or none options are unwrapped here fun will return a error result
+    // if any err results or none options are unwrapped here fun will return an error result
     someErrorResult.unwrap();
 });
 const betterOkFunction = fun(params => {
-    return "all good!"
+    return "all good!";
 });
 
-betterFunction() // => Err(...)
-betterOkFunction() // => Ok("all good!")
+betterFunction(); // => Err(...)
+betterOkFunction(); // => Ok("all good!")
 ~~~
 
-this is extremely powerfull to specify requirements for a function execution to be considered a success:
+This is extremely powerfull to specify requirements for a function execution to be considered a success:
 
 ~~~js
 const { fun, Ok, Err } = require('@vdbst/std');
 
 const betterErrorFunction = fun(params => {
-    var x = realyImportantExecution().unwrap()
+    var x = reallyImportantExecution().unwrap()
     logSomethingIntoDB();
     anotherImportantThing(x).orFail();
 });
 ~~~
-this will return an Err result if realyImportantExecution or anotherImportantThing Fail, but ignore any errors in logSomethingIntoDB.
+This will return an Err result if reallyImportantExecution or anotherImportantThing Fail, but ignore any errors in logSomethingIntoDB.
 
 # Match
-Match is a function for patternmatching. Its like a switch statement on steroids. With return value.
+Match is a function for patternmatching. It's like a switch statement on steroids. With return value.
 
 ## Usage
 ~~~js
@@ -265,7 +268,7 @@ const { match, Ok } = require('@vdbst/std');
 
 const x = Ok("nice"); // or Err, None, Some or just any value
 
-const res = match(x,{
+const res = match(x, {
     // this will match and unwrap ok results 
     Ok: (value) => true,
 
@@ -273,13 +276,13 @@ const res = match(x,{
     Err: (error) => false,
 
     // this will match values like 10
-    10: (val) => {console.log("its 10!") return true}, 
+    10: (val) => {console.log("its 10!"); return true;}, 
 
     // this will match null or undefined 
-    null: (val) => {console.log("nothing is here!") return false}, 
+    null: (val) => {console.log("nothing is here!"); return false;}, 
 
     // this  will macht anything
-    _: (val) => {console.log("i did not think about that") return false} 
+    _: (val) => {console.log("i did not think about that"); return false;} 
 });
 
 res // => true
@@ -291,7 +294,7 @@ Result/Option type > null > value > _
 
 ## Returns 
 
-match statements will return the result of the handler. If nothing matches it will return undefined
+Match statements will return the result of the handler. If nothing matches it will return undefined:
 ~~~js
 const res = match(x,{});
 res // => undefined
