@@ -9,10 +9,10 @@ To import in node:
 
 ~~~js
 // complete 
-const std = require('@vdbst/std');
+const std = require('@vdbst/standard');
 
 // only some features
-const { Result, Ok, Err, fun } = require('@vdbst/std');
+const { Result, Ok, Err, fun } = require('@vdbst/standard');
 ~~~
 
 # Options
@@ -22,7 +22,7 @@ The option class is intended to be used as a return in functions that may or may
 
 Basic usage:
 ~~~js
-const { Option, OptionState } = require('@vdbst/std');
+const { Option, OptionState } = require('@vdbst/standard');
 
 function test (){
     const nullOrvalue = someCode();
@@ -43,7 +43,7 @@ In most cases these should be used since they are way more readable.
 
 
 ~~~js
-const { Option, Some, None } = require('@vdbst/std');
+const { Option, Some, None } = require('@vdbst/standard');
 
 function test (){
     const nullOrvalue = someCode();
@@ -58,7 +58,7 @@ function test (){
 
 But thats still pretty long. This implementeation is perfect if you want to do some null/none handling yourself, or if you have some specific cases that need to return a none value. If you just want to convert a value that may be null or undefined into an option there is another shorthand: 
 ~~~js
-const { Option, Perhaps } = require('@vdbst/std');
+const { Option, Perhaps } = require('@vdbst/standard');
 
 function test (){
     const nullOrvalue = someCode();
@@ -127,7 +127,7 @@ A result value is used to indicate that an operation might fail. They are very s
 
 Basic usage:
 ~~~js
-const { Result, ResultState } = require('@vdbst/std');
+const { Result, ResultState } = require('@vdbst/standard');
 
 function test (){
     // something that can fail
@@ -149,7 +149,7 @@ In most cases these should be used since they are way more readable.
 
 
 ~~~js
-const { Result, Ok, Err } = require('@vdbst/std');
+const { Result, Ok, Err } = require('@vdbst/standard');
 
 function test (){
     // something that can fail
@@ -232,7 +232,7 @@ Functions wrapped with fun will allways return Results.
 Basic usage:
 
 ~~~js
-const { fun, Ok, Err } = require('@vdbst/std');
+const { fun, Ok, Err } = require('@vdbst/standard');
 
 const betterErrorFunction = fun(params => {
     // if any err results or none options are unwrapped here fun will return an error result
@@ -249,7 +249,7 @@ betterOkFunction(); // => Ok("all good!")
 This is extremely powerfull to specify requirements for a function execution to be considered a success:
 
 ~~~js
-const { fun, Ok, Err } = require('@vdbst/std');
+const { fun, Ok, Err } = require('@vdbst/standard');
 
 const betterErrorFunction = fun(params => {
     var x = reallyImportantExecution().unwrap()
@@ -264,7 +264,7 @@ Match is a function for patternmatching. It's like a switch statement on steroid
 
 ## Usage
 ~~~js
-const { match, Ok } = require('@vdbst/std');
+const { match, Ok } = require('@vdbst/standard');
 
 const x = Ok("nice"); // or Err, None, Some or just any value
 
