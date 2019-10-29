@@ -1,6 +1,18 @@
 # STANDARD
 
 A helper and utility library for better and cleaner code. 
+## Installation
+
+Since we are shipping this package from the GitHub package registry we need to add some hints for npm.
+
+Add a '.npmrc' file in your main directory if it doesn't exist. Add the line:
+~~~
+@vdbst:registry=https://npm.pkg.github.com/vdbst
+~~~
+Then you can just go into the command line and enter:
+~~~
+npm i @vdbst/standard
+~~~
 
 ## Importing
 This library ships as compiled typescript that can directly be imported in node or the browser. It is recommended to use a bundler for frontend use since this lib contains quite a lot of small files. This library uses ES6 syntax and you may need some polyfills for older browsers.
