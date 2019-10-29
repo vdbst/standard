@@ -162,7 +162,7 @@ function test (){
 
 
 ## Functions
-Now that we can know how to create results we need a way to interact with them.
+Now that we know how to create results we need a way to interact with them.
 
 Each result object has some member functions that can be used to interact with it.
 
