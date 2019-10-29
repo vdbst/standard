@@ -1,4 +1,4 @@
-# STD
+# STNDARD
 
 A helper and utility library for better and cleaner code. 
 

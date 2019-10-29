@@ -13,7 +13,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@vdbst"
   },
-  "repository": "git://github.com/vdbst/std.git",
+  "repository": "git://github.com/vdbst/standard.git",
   "devDependencies": {
     "@types/chai": "^4.2.4",
     "@types/mocha": "^5.2.7",
