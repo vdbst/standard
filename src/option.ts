@@ -122,7 +122,6 @@ export class Option<T = any>{
     static Some<T>(result: T): Option<T>;
     static Some<T>(result: Option<T>): Option<T>;
     static Some<T>(result: Option<T>|T): Option<T>{
-        if(result === undefined || result === null) reportError("Called Some with a null value") ;
         if (typeof result == "object"  && result instanceof Option) {
             if(result.isNone()) reportError("Called Some with a None Option value");
             return result;
@@ -139,7 +138,7 @@ export class Option<T = any>{
     static Perhaps<T>(result?: Option<T>): Option<T>;
     static Perhaps<T>(result?: T|Option<T>): Option<T>{
         if(result === undefined || result === null) return None();
-        if (typeof result == "object"  && result instanceof Option) {
+        if (typeof result == "object" && result instanceof Option) {
             return result;
         }else{
             return new Option(OptionState.Some, result);
@@ -149,7 +148,7 @@ export class Option<T = any>{
 
 export function Some<T>(result: T): Option<T>;
 export function Some<T>(result: Option<T>): Option<T>;
-export function Some<T>(result: Option<T>|T):Option<T>{
+export function Some<T>(result: Option<T>|T): Option<T>{
     return Option.Some(result as any);
 }
 

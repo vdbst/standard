@@ -111,7 +111,6 @@ export class Result<R = any,E = any>{
     static Ok<T>(result:  T):Result<T,any>;
     static Ok<T>(result:  Result<T>):Result<T,any>;
     static Ok<T>(result:  Result<T,any>):Result<T,any>{
-        if(result === undefined) return Err("no result given to Ok");
         if (typeof result == "object"  && result instanceof Result) {
             return result;
         }else{

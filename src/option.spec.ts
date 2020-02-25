@@ -41,11 +41,11 @@ describe("Option",() => {
 
         });
 
-        it('should throw if there is no value', () => {
+        it('should not throw if there is no value', () => {
             // @ts-ignore
-            expect(() => Some()).to.throw("Called Some with a null value");
-            expect(() => Some(undefined)).to.throw("Called Some with a null value");
-            expect(() => Some(null)).to.throw("Called Some with a null value");
+            expect(() => Some()).not.to.throw;
+            expect(() => Some(undefined)).not.to.throw;
+            expect(() => Some(null)).not.to.throw;
         });
     });
         
@@ -124,10 +124,11 @@ describe("Option",() => {
             expect(noneOption.or("But its okay")).to.be.an.instanceof(Option).and.to.have.property("value","But its okay");
         });
 
-        it('should not convert None to Some', () => {
+        it('should pass through Some', () => {
             const someOption = None();
-            expect(someOption.or(None())).to.be.an.instanceof(Option);
-            expect(someOption.or(() => None()).isNone()).to.be.true;
+            expect(someOption.or(Some(undefined))).to.be.an.instanceof(Option);
+            expect(someOption.or(Some(undefined)).isSome()).to.be.true;
+            expect(someOption.or(() => Some(undefined)).isNone()).to.be.false;
         });
 
         it('should execute handler functions',() => {

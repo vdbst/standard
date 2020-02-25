@@ -45,11 +45,10 @@ describe("Result",() => {
             expect(notOkResult.error).to.equal("Something bad happend!");
         });
 
-        it('should return Err if there is no result', () => {
+        it('should not return Err if there is no result', () => {
             const result = Ok(undefined);
-            expect(result.state).to.equal(ResultState.Err);
-            expect(result.error).to.equal("no result given to Ok");
-
+            expect(result.state).not.to.equal(ResultState.Err);
+            expect(result.error).not.to.equal("no result given to Ok");
         });
     });
     
@@ -133,6 +132,13 @@ describe("Result",() => {
             expect(okResult.or(Err("Oh no"))).to.be.an.instanceof(Result).and.to.have.property("error","Oh no");
             expect(okResult.or(() => Err("Oh no")).isErr()).to.be.true;
 
+        });
+
+        it('should pass through Oks', () => {
+            const okResult = Err("Something bad happend!");
+            expect(okResult.or(Ok(undefined))).to.be.an.instanceof(Result);
+            expect(okResult.or(Ok(undefined)).isOk()).to.be.true;
+            expect(okResult.or(Ok(undefined)).unwrap()).not.to.be.an.instanceof(Result);
         });
 
         it('should execute handler functions',() => {
