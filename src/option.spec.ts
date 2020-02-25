@@ -110,6 +110,20 @@ describe("Option",() => {
         });
     });
 
+    describe("expect",() => {
+        it('should throw on None options',() => {
+            const noneOption = None();
+            const demo = () => noneOption.expect("to throw");
+            expect(demo).to.throw("to throw");
+        });
+        it('should pass Some options',() => {
+            const noneOption = Some("");
+            const demo = () => noneOption.expect("not to throw");
+            expect(demo).not.to.throw;
+        });
+    });
+
+
     describe("or",() => {
         it('should return Some options',() => {
             const someOption = Some("All good!");

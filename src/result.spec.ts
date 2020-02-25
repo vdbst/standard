@@ -89,6 +89,18 @@ describe("Result",() => {
         });
     });     
 
+    describe("expect",() => {
+        it('should throw on Err options',() => {
+            const errOption = Err("");
+            const demo = () => errOption.expect("to throw");
+            expect(demo).to.throw("to throw");
+        });
+        it('should pass Ok options',() => {
+            const errOption = Ok("");
+            const demo = () => errOption.expect("not to throw");
+            expect(demo).not.to.throw;
+        });
+    });
 
     describe("isOk",() => {
         it('should return true on Ok results',() => {
@@ -207,6 +219,17 @@ describe("Result",() => {
         it('should throw on Err results',() => {
             const result = Err('some value');
             expect(() => result.unwrap()).to.throw("Uncatched error Result!");
+        });
+
+        it('should also print the reason',() => {
+            const result = Err('some value');
+            let asString = "";
+            try{
+                result.unwrap();
+            }catch(ex){
+                asString = ex.toString();
+            }
+            expect(asString).to.equal("Error: Uncatched error Result!\nreason: some value");
         });
     });
 

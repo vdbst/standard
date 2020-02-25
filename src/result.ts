@@ -27,6 +27,7 @@ export class Result<R = any,E = any>{
         e.reason = reason;
         e.IS_STD_ERR = true;
         e.stack = this.stack;
+        e.toString = function() {return (new Error().toString.apply(this)) + ((this.reason)?("\nreason: " + this.reason):"") + ((this.stack)?("\nstack: " + this.stack):"")};
         throw e;
     }    
 
@@ -81,6 +82,13 @@ export class Result<R = any,E = any>{
         }
     }
 
+    expect(message: string){
+        if(this.isErr()){
+            const err = new Error(message);
+            (err as any).isExpect = true;
+            throw err;
+        }
+    }
 
     unwrap(): R {
         this._errorHandlerRegistered = true;

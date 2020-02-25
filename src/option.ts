@@ -93,6 +93,14 @@ export class Option<T = any>{
         }
     }
 
+    expect(message: string){
+        if(this.isNone()){
+            const err = new Error(message);
+            (err as any).isExpect = true;
+            throw err;
+        }
+    }
+
     unwrap(): T|null{
         this._nullHandlerRegistered = true;
         if(this.state === OptionState.Some){

@@ -1,6 +1,7 @@
 import { Ok, Err, match , Some, None, fun, Result} from './mod';
 import { expect } from 'chai';
 import 'mocha';
+import { Option } from './option';
 
 describe("fun",() => {
 
@@ -41,7 +42,7 @@ describe("fun",() => {
 
         });
 
-        it('should carch errors', () => {
+        it('should catch errors', () => {
 
             const demo = fun((val) => {throw new Error("test")});
             let res: Result = Err("no val");
@@ -50,6 +51,17 @@ describe("fun",() => {
             expect(res.isErr()).to.be.true;
             expect(res.error).to.equal("Error: test");
         });
+
+        it('should not catch expect errors with Err', () => {
+            const demo = fun((val) => Err("test").expect("test to be there"));
+            expect(() => {demo()}).to.throw();
+        });
+
+        it('should not catch expect errors with None', () => {
+            const demo = fun((val) => None().expect("it to be there"));
+            expect(() => {demo()}).to.throw();
+        });
+        
     });
 
       
