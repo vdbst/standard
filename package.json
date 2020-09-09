@@ -6,7 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "build": "tsc",
-    "test": "nyc mocha lib/**.spec.js"
+    "test": "nyc mocha lib/**.spec.js",
+    "prepare": "tsc"
   },
   "author": "Jan Nitschke",
   "license": "ISC",
