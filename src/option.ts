@@ -146,11 +146,15 @@ export class Option<T = any>{
     static Perhaps<T>(result?: Option<T>): Option<T>;
     static Perhaps<T>(result?: T|Option<T>): Option<T>{
         if(result === undefined || result === null) return None();
-        if (typeof result == "object" && result instanceof Option) {
+        if (Option.isOption(result)) {
             return result;
         }else{
-            return new Option(OptionState.Some, result);
+            return Some(result as T);
         }
+    }
+
+    static isOption(canidate: any): canidate is Option{
+        return typeof canidate === "object" && typeof canidate.isNone === "function" && typeof canidate.isSome === "function";
     }
 }
 

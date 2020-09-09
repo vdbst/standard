@@ -116,10 +116,14 @@ export class Result<R = any,E = any>{
         });
     }
 
+    static isResult(canidate: any): canidate is Result{
+        return typeof canidate === "object" && typeof canidate.isErr === "function" && typeof canidate.isOk === "function";
+    }
+
     static Ok<T>(result:  T):Result<T,any>;
     static Ok<T>(result:  Result<T>):Result<T,any>;
     static Ok<T>(result:  Result<T,any>):Result<T,any>{
-        if (typeof result == "object"  && result instanceof Result) {
+        if (Result.isResult(result)){
             return result;
         }else{
             return new Result(ResultState.Ok, result);
@@ -130,7 +134,7 @@ export class Result<R = any,E = any>{
     static Err<T>(result:  Result<T>):Result<any,T>;
     static Err<T>(reason: Result<any,T>|T): Result<any,T|string>{
         if(reason === undefined || reason === null) return new Result(ResultState.Err, "no reason given to Err");
-        if (typeof reason == "object" && reason instanceof Result) {
+        if (Result.isResult(reason)){
             return reason;
         }else{
             return new Result(ResultState.Err, reason);
