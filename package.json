@@ -1,6 +1,6 @@
 {
   "name": "standard",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "",
   "main": "lib/mod.js",
   "scripts": {
@@ -24,6 +24,8 @@
     "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
   },
+  "types": "lib/mod.d.ts",
+  "typings": "lib/mod.d.ts",
   "nyc": {
     "extension": [
       ".js"
