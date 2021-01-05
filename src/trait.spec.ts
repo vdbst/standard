@@ -1,11 +1,11 @@
-import { Trait } from './mod';
+import { Trait, TraitType } from './mod';
 import { expect } from 'chai';
 import 'mocha';
 
 describe("Trait",() => {
-    const Testable = new Trait("test");
-    const NotTestable = new Trait("test");
-    const NotTestableOther = new Trait("test with other desc");
+    const Testable: TraitType = new Trait("test");
+    const NotTestable: TraitType = new Trait("test");
+    const NotTestableOther: TraitType = new Trait("test with other desc");
 
     describe("Trait constructor",() => {
 
@@ -34,9 +34,9 @@ describe("Trait",() => {
                 [Testable]: "test"
             }
             
-            expect(a instanceof Testable).to.equal(true);
-            expect(a instanceof NotTestable).to.equal(false);
-            expect(a instanceof NotTestableOther).to.equal(false);
+            expect(a instanceof (Testable as any)).to.equal(true);
+            expect(a instanceof (NotTestable as any)).to.equal(false);
+            expect(a instanceof (NotTestableOther as any)).to.equal(false);
         });
     });
 });
