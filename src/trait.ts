@@ -7,7 +7,8 @@ type TTrait = {
 	new (description: string): TraitType;
 };
 
-class ITrait {
+
+class Trait {
 	private symbol: symbol;
 
 	constructor(description: string) {
@@ -23,4 +24,6 @@ class ITrait {
 	}
 }
 
-export const Trait = (ITrait as unknown) as TTrait;
+export const createTrait:(description: string) => { readonly 0: unique symbol }[0] = (description: string) => {
+	return new Trait(description) as any;
+}
