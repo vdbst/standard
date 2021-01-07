@@ -1,12 +1,3 @@
-const sym: (a: string) => { readonly 0: unique symbol }[0] = (a) =>
-	Symbol(a) as ReturnType<typeof sym>;
-
-export type TraitType = ReturnType<typeof sym>;
-
-type TTrait = {
-	new (description: string): TraitType;
-};
-
 
 class Trait {
 	private symbol: symbol;
@@ -24,6 +15,7 @@ class Trait {
 	}
 }
 
-export const createTrait:(description: string) => { readonly 0: unique symbol }[0] = (description: string) => {
-	return new Trait(description) as any;
+export const createTrait = <T extends string>(description: T) => {
+
+	return new Trait(description) as any as T;
 }
