@@ -1,10 +1,13 @@
 
 function reportError(reason: string){
+    throw createError(reason);
+}
+
+function createError(reason: string) {
     let e = new Error(reason) as any;
     e.reason = reason;
     e.IS_STD_ERR = true;
-    throw e;
-}   
+}
 
 export const enum OptionState {
     Some = "Some",
@@ -101,15 +104,12 @@ export class Option<T = any>{
         }
     }
 
-    unwrap(): T|null{
+    unwrap(): T{
         this._nullHandlerRegistered = true;
         if(this.state === OptionState.Some){
             return this.value as T;
         }else{
-            reportError("Option has no value");
-            // never executed, just to keep typescript calm...
-            /* istanbul ignore next */
-            return null;
+            throw createError("Option has no value");
         }
     }
 
