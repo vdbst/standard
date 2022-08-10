@@ -4,9 +4,10 @@ function reportError(reason: string){
 }
 
 function createError(reason: string) {
-    let e = new Error(reason) as any;
-    e.reason = reason;
-    e.IS_STD_ERR = true;
+    const e = new Error(reason);
+    (e as any).reason = reason;
+    (e as any).IS_STD_ERR = true;
+    return e;
 }
 
 export const enum OptionState {
